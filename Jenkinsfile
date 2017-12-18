@@ -12,7 +12,14 @@ properties(
   ]
 )
 
-@Library('multiarch-ci-libraries@dev') _
+library identifier: "multiarch-ci-libraries@scoheb-dev",
+        retriever: modernSCM([$class: 'GitSCMSource',
+                              remote: "https://github.com/scoheb/multiarch-ci-libraries",
+                              traits: [[$class: 'jenkins.plugins.git.traits.BranchDiscoveryTrait'],
+                                       [$class: 'RefSpecsSCMSourceTrait',
+                                        templates: [[value: '+refs/heads/*:refs/remotes/@{remote}/*'],
+                                                    [value: '+refs/pull/*:refs/remotes/origin/pr/*']]]]])
+
 
 import com.redhat.multiarch.ci.Slave
 
