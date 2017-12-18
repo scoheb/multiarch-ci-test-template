@@ -3,7 +3,7 @@ properties(
     parameters(
       [
         string(
-          defaultValue: 'x86_64,ppc64le',
+          defaultValue: 'x86_64',
           description: 'A comma separated list of architectures to run the test on. Valid values include [x86_64, ppc64le, aarch64, s390x].',
           name: 'ARCHES'
         )
@@ -17,11 +17,19 @@ properties(
 import com.redhat.multiarch.ci.Slave
 
 def List arches = params.ARCHES.tokenize(',')
-def Boolean runOnProvisionedHosts = true;
-def Boolean installAnsible = true;
+def Boolean runOnProvisionedHosts = false
+def Boolean installAnsible = true
+def tenant = "continuous-infra"
+def dockerUrl = "172.30.1.1:5000"
+def krbPrincipal = "jenkins/ci-ops-jenkins.rhev-ci-vms.eng.rdu2.redhat.com@REDHAT.COM"
+def keytab = "KEYTAB"
 
 parallelMultiArchTest(
   arches,
+  tenant,
+  dockerUrl,
+  krbPrincipal,
+  keytab,
   runOnProvisionedHosts,
   installAnsible,
   { Slave slave ->
